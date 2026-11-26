@@ -19,11 +19,9 @@ body:
     attributes:
       label: Hints
       description: Optional. Suspected code, related issues or commits, constraints on the fix.
-  - type: dropdown
-    id: base
+  - type: input
+    id: fix-on
     attributes:
-      label: Fix target
-      options:
-        - Let the agent decide
-        - develop
-        - production
+      label: Fix on
+      description: Optional. The branch the fix belongs on, for example develop, production or a working branch such as feature/waitlist. Leave empty and the agent works out where the bug exists and proposes a branch in its plan.
+      placeholder: Let the agent decide
