@@ -1,0 +1,6 @@
+{
+  "name": "Agent pipeline",
+  "description": "Connects this repository to the Compis agent pipeline: PR and push review, issue refinement, implementation and @cenplex-agent mentions. Also needs .github/agent-pipeline.yml.",
+  "iconName": "octicon dependabot",
+  "categories": ["Automation"]
+}

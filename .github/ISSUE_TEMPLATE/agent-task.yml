@@ -1,0 +1,29 @@
+name: Agent task
+description: A bug or small change for the agent pipeline. The agent asks questions here or posts a plan, then opens a draft PR.
+labels: ["agent:triage", "source:manual"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The agent reads this issue and the code, then either asks what it needs to know in the thread or posts an implementation plan and starts on a draft PR. It never merges.
+        **No patient or practice data**: describe the behaviour, not the people. Refer to "the practice" or "the patient".
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong or what should change
+      description: Observed versus expected behaviour, where it shows (screen, service, log context), and the version if known.
+    validations:
+      required: true
+  - type: textarea
+    id: hints
+    attributes:
+      label: Hints
+      description: Optional. Suspected code, related issues or commits, constraints on the fix.
+  - type: dropdown
+    id: base
+    attributes:
+      label: Fix target
+      options:
+        - Let the agent decide
+        - develop
+        - production

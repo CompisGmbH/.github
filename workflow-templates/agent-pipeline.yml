@@ -1,0 +1,52 @@
+# Agent pipeline: forwards repository events to the shared pipeline in
+# CompisGmbH/cenplex-devops-deployments, which decides what runs. Per-repository settings are in
+# .github/agent-pipeline.yml. Created from this template; when it changes, update the copies
+# in the repositories that use it. Adjust the push branches to the ones the repository reviews.
+name: agent-pipeline
+run-name: "${{ github.event_name }}${{ (github.event.pull_request.number || github.event.issue.number) && format(' #{0}', github.event.pull_request.number || github.event.issue.number) || '' }}"
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened, labeled]
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  push:
+    branches: [develop, production]
+  repository_dispatch:
+    types: [agent-issue]
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+    inputs:
+      flow:
+        description: What to run
+        type: choice
+        options: [refine, push-review, sweep]
+      issue:
+        description: "refine: the issue number"
+        required: false
+      branch:
+        description: "push-review: the branch to review"
+        required: false
+        default: develop
+      from:
+        description: "push-review: review the commits after this ref (tag, branch or SHA)"
+        required: false
+      to:
+        description: "push-review: up to this ref (default the branch tip)"
+        required: false
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  agent:
+    uses: CompisGmbH/cenplex-devops-deployments/.github/workflows/agent-pipeline.yml@develop
+    secrets: inherit
